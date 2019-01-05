@@ -145,10 +145,12 @@ myOdd :: Integral a => a -> Bool
 myOdd n = n `mod` 2 == 1
 
 myGcd :: Integral a => a -> a -> a
-myGcd a b = last $ filter (\k -> a `mod` k == 0 && b `mod` k == 0) [1..min a b]
+myGcd a b = last cds
+    where cds = filter (\x -> a `mod` x == 0 && b `mod` x == 0 ) [1..min a b]
 
 myLcm :: Integral a => a -> a -> a
-myLcm a b = head $ dropWhile (\k -> k `mod` a /= 0 || k `mod` b /= 0) [max a b, 2 * max a b..]
+myLcm a b = head cms
+    where cms = filter (\x -> x `mod` a == 0 && x `mod` b == 0 ) [max a b,2 * max a b..a * b]
 
 mySum :: Num a => [a] -> a
 mySum = foldl (+) 0
@@ -162,7 +164,6 @@ myAll p xs = foldl (&&) True (map p xs)
 myAny :: (a -> Bool) -> [a] -> Bool
 myAny p xs = foldl (||) False (map p xs)
 
-
-
 myFoldl :: (b -> a -> b) -> b -> [a] -> b
-myFoldl = foldl
+myFoldl f x [] = x
+myFoldl f x y:ys = myFoldl f (f x y) ys
